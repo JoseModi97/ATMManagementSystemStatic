@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ATM System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="loginNav">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="createAccountNav">Create Account</a>
+                    </li>
+                    <li class="nav-item" style="display: none;">
+                        <a class="nav-link" href="#" id="logoutNav">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Login Section -->
+        <section id="loginView">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="loginCustomerId" class="form-label">Customer ID</label>
+                    <input type="number" class="form-control" id="loginCustomerId" required>
+                </div>
+                <div class="mb-3">
+                    <label for="loginPin" class="form-label">PIN</label>
+                    <input type="password" class="form-control" id="loginPin" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </section>
+
+        <!-- Create Account Section -->
+        <section id="createAccountView" style="display: none;">
+            <h2>Create Account</h2>
+            <p>Your new Customer ID will be automatically generated.</p>
+            <form id="createAccountForm">
+                <div class="mb-3">
+                    <label for="createPin" class="form-label">Choose a PIN (4-8 digits)</label>
+                    <input type="password" class="form-control" id="createPin" required>
+                </div>
+                <div class="mb-3">
+                    <label for="initialDeposit" class="form-label">Initial Deposit (Checking)</label>
+                    <input type="number" class="form-control" id="initialDeposit" value="0" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-success">Create Account</button>
+            </form>
+        </section>
+
+        <!-- Account Menu Section -->
+        <section id="accountMenuView" style="display: none;">
+            <h2>Account Menu</h2>
+            <div class="d-grid gap-2">
+                <button class="btn btn-info" id="viewBalanceBtn">View Balance</button>
+                <button class="btn btn-primary" id="depositBtn">Deposit</button>
+                <button class="btn btn-warning" id="withdrawBtn">Withdraw</button>
+                <button class="btn btn-success" id="transferBtn">Transfer</button>
+                <button class="btn btn-danger" id="exitBtn">Exit</button>
+            </div>
+        </section>
+
+        <!-- View Balance Section -->
+        <section id="viewBalanceView" style="display: none;">
+            <h2>Account Balance</h2>
+            <p><strong>Checking Account:</strong> $<span id="checkingBalance">0.00</span></p>
+            <p><strong>Savings Account:</strong> $<span id="savingsBalance">0.00</span></p>
+            <button class="btn btn-secondary" id="backToMenuBtnBalance">Back to Menu</button>
+        </section>
+
+        <!-- Deposit Section -->
+        <section id="depositView" style="display: none;">
+            <h2>Deposit Funds</h2>
+            <form id="depositForm">
+                <div class="mb-3">
+                    <label for="depositAccountType" class="form-label">Account Type</label>
+                    <select class="form-select" id="depositAccountType" required>
+                        <option value="checking">Checking</option>
+                        <option value="savings">Savings</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="depositAmount" class="form-label">Amount</label>
+                    <input type="number" class="form-control" id="depositAmount" min="0.01" step="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Deposit</button>
+                <button type="button" class="btn btn-secondary" id="backToMenuBtnDeposit">Back to Menu</button>
+            </form>
+        </section>
+
+        <!-- Withdraw Section -->
+        <section id="withdrawView" style="display: none;">
+            <h2>Withdraw Funds</h2>
+            <form id="withdrawForm">
+                <div class="mb-3">
+                    <label for="withdrawAccountType" class="form-label">Account Type</label>
+                    <select class="form-select" id="withdrawAccountType" required>
+                        <option value="checking">Checking</option>
+                        <option value="savings">Savings</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="withdrawAmount" class="form-label">Amount</label>
+                    <input type="number" class="form-control" id="withdrawAmount" min="0.01" step="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-warning">Withdraw</button>
+                <button type="button" class="btn btn-secondary" id="backToMenuBtnWithdraw">Back to Menu</button>
+            </form>
+        </section>
+
+        <!-- Transfer Section -->
+        <section id="transferView" style="display: none;">
+            <h2>Transfer Funds</h2>
+            <form id="transferForm">
+                <div class="mb-3">
+                    <label for="transferFromAccount" class="form-label">From Account</label>
+                    <select class="form-select" id="transferFromAccount" required>
+                        <option value="checking">Checking</option>
+                        <option value="savings">Savings</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="transferToAccount" class="form-label">To Account</label>
+                    <select class="form-select" id="transferToAccount" required>
+                        <option value="savings">Savings</option>
+                        <option value="checking">Checking</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="transferAmount" class="form-label">Amount</label>
+                    <input type="number" class="form-control" id="transferAmount" min="0.01" step="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-success">Transfer</button>
+                <button type="button" class="btn btn-secondary" id="backToMenuBtnTransfer">Back to Menu</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Modal for messages -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">System Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageModalBody">
+                    <!-- Message content will be injected here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
