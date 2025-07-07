@@ -40,3 +40,7 @@ body {
     /* This is mainly a reminder that its height affects body padding-top */
     /* height: 56px; /* Set this if Bootstrap doesn't define it or you override it */
 }
+
+#dashboardView {
+    padding-top: 28px !important; /* Reduced padding to decrease space below navbar */
+}
