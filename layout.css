@@ -42,5 +42,5 @@ body {
 }
 
 #dashboardView {
-    padding-top: 28px !important; /* Reduced padding to decrease space below navbar */
+    padding-top: 0 !important; /* Eliminate space between navbar and dashboard content row */
 }
