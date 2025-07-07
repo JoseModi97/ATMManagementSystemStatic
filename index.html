@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATM Management System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Bootswatch/Bootswatch_ Cerulean_files/bootstrap.css">
+    <link rel="stylesheet" href="Bootswatch/Bootswatch_ Cerulean_files/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="Bootswatch/Bootswatch_ Cerulean_files/custom.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">ATM System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +61,7 @@
                     <label for="initialDeposit" class="form-label">Initial Deposit (Checking)</label>
                     <input type="number" class="form-control" id="initialDeposit" value="0" min="0" required>
                 </div>
-                <button type="submit" class="btn btn-success">Create Account</button>
+                <button type="submit" class="btn btn-primary">Create Account</button>
             </form>
         </section>
 
@@ -71,7 +72,7 @@
                 <button class="btn btn-info" id="viewBalanceBtn">View Balance</button>
                 <button class="btn btn-primary" id="depositBtn">Deposit</button>
                 <button class="btn btn-warning" id="withdrawBtn">Withdraw</button>
-                <button class="btn btn-success" id="transferBtn">Transfer</button>
+                <button class="btn btn-primary" id="transferBtn">Transfer</button> <!-- Changed btn-success to btn-primary -->
                 <button class="btn btn-danger" id="exitBtn">Exit</button>
             </div>
         </section>
@@ -146,7 +147,7 @@
                     <label for="transferAmount" class="form-label">Amount</label>
                     <input type="number" class="form-control" id="transferAmount" min="0.01" step="0.01" required>
                 </div>
-                <button type="submit" class="btn btn-success">Transfer</button>
+                <button type="submit" class="btn btn-primary">Transfer</button> <!-- Changed btn-success to btn-primary -->
                 <button type="button" class="btn btn-secondary" id="backToMenuBtnTransfer">Back to Menu</button>
             </form>
         </section>
@@ -171,7 +172,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="Bootswatch/Bootswatch_ Cerulean_files/bootstrap.bundle.min.js.download"></script>
     <script src="app.js"></script>
 </body>
 </html>
