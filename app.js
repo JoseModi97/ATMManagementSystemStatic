@@ -89,9 +89,21 @@ $(document).ready(function () {
             savings_balance: 0.00 // Default savings to 0
         });
         saveAccounts();
-        showModal('Account Created Successfully', `Your new Customer ID is: ${newCustomerId}. Please remember it for login.`);
+        
+        // Show modal and on close, auto-fill login
+        const successModal = new bootstrap.Modal($('#messageModal')[0]);
+        $('#messageModalLabel').text('Account Created Successfully');
+        $('#messageModalBody').text(`Your new Customer ID is: ${newCustomerId}. You will be taken to the login page with your credentials pre-filled.`);
+        
+        $('#messageModal').one('hidden.bs.modal', function () {
+            $('#loginCustomerId').val(newCustomerId);
+            $('#loginPin').val(pin);
+            showView('loginView');
+        });
+        
+        successModal.show();
         $('#createAccountForm')[0].reset();
-        showView('loginView');
+        // showView('loginView'); // This is now handled by modal close event
     });
 
     $('#loginForm').submit(function (e) {
