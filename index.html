@@ -61,21 +61,31 @@
         </div>
 
         <!-- Create Account Section -->
-        <section id="createAccountView" style="display: none;">
-            <h2>Create Account</h2>
-            <p>Your new Customer ID will be automatically generated.</p>
-            <form id="createAccountForm">
-                <div class="mb-3">
-                    <label for="createPin" class="form-label">Choose a PIN (4-8 digits)</label>
-                    <input type="password" class="form-control" id="createPin" required>
-                </div>
-                <div class="mb-3">
-                    <label for="initialDeposit" class="form-label">Initial Deposit (Checking)</label>
-                    <input type="number" class="form-control" id="initialDeposit" value="0" min="0" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Create Account</button>
-            </form>
-        </section>
+        <div class="row justify-content-center mt-4"> <!-- Added mt-4 for spacing if both forms were somehow visible -->
+            <div class="col-md-6">
+                <section id="createAccountView" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title text-center">Create Account</h2>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted text-center small mb-3">Your new Customer ID will be automatically generated.</p>
+                            <form id="createAccountForm">
+                                <div class="mb-3">
+                                    <label for="createPin" class="form-label">Choose a PIN (4-8 digits)</label>
+                                    <input type="password" class="form-control" id="createPin" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="initialDeposit" class="form-label">Initial Deposit (Checking)</label>
+                                    <input type="number" class="form-control" id="initialDeposit" value="0" min="0" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
 
         <!-- Account Menu Section - This will be replaced by the dashboard -->
         <!-- <section id="accountMenuView" style="display: none;"> -->
