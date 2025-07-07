@@ -24,9 +24,45 @@ $(document).ready(function () {
     }
 
     // --- UI Navigation ---
-    function showView(viewId) {
-        $('section').hide();
-        $('#' + viewId).show();
+    function showView(viewId, isDashboardContent = false) {
+        if (isDashboardContent) {
+            // Hide all sections within dashboardContent first
+            $('#dashboardContent section').hide();
+            // Show the target section within dashboardContent
+            $('#' + viewId).show();
+            // Ensure dashboardView itself is visible
+            $('#dashboardView').show();
+            // Hide pre-login views
+            $('#loginView, #createAccountView').hide();
+        } else {
+            // Hide all main sections and dashboard view
+            $('section:not(#dashboardContent section)').hide(); // Hide sections that are direct children of body
+            $('#dashboardView').hide();
+            // Show the target top-level view (e.g., loginView)
+            $('#' + viewId).show();
+        }
+
+        // Update active class for sidebar
+        if (currentUser) {
+            $('#dashboardSidebar .nav-link').removeClass('active');
+            if (viewId === 'viewBalanceView' || viewId === 'depositView' || viewId === 'withdrawView' || viewId === 'transferView') {
+                 // Construct the selector for the button based on the viewId
+                let buttonId = viewId.replace('View', 'Btn');
+                // For viewBalanceBtn, it's directly the ID
+                if (viewId === 'viewBalanceView') buttonId = 'viewBalanceBtn';
+
+                $('#' + buttonId).addClass('active');
+
+                // If it's a dashboard content view, ensure the dashboard itself is visible
+                // and the pre-login views are hidden
+                $('#dashboardView').show();
+                $('#loginView, #createAccountView').hide();
+
+            } else if (viewId === 'dashboardView') {
+                 // Default to view balance when dashboard is first shown
+                $('#viewBalanceBtn').addClass('active');
+            }
+        }
     }
 
     function showModal(title, message) {
@@ -38,6 +74,7 @@ $(document).ready(function () {
     // Initial view
     showView('loginView');
     $('#logoutNav').parent().hide();
+    $('#dashboardView').hide(); // Ensure dashboard is hidden initially
 
 
     // --- Navigation Links ---
@@ -45,6 +82,9 @@ $(document).ready(function () {
         e.preventDefault();
         if (!currentUser) {
             showView('loginView');
+            $('#dashboardView').hide(); // Ensure dashboard is hidden
+            $('#loginNav, #createAccountNav').parent().show();
+            $('#logoutNav').parent().hide();
         }
     });
 
@@ -52,6 +92,9 @@ $(document).ready(function () {
         e.preventDefault();
         if (!currentUser) {
             showView('createAccountView');
+            $('#dashboardView').hide(); // Ensure dashboard is hidden
+            $('#loginNav, #createAccountNav').parent().show();
+            $('#logoutNav').parent().hide();
         }
     });
 
@@ -60,7 +103,7 @@ $(document).ready(function () {
         currentUser = null;
         $('#loginNav, #createAccountNav').parent().show();
         $('#logoutNav').parent().hide();
-        showView('loginView');
+        showView('loginView'); // This will hide dashboardView
         $('#loginForm')[0].reset();
         showModal('Logout', 'You have been logged out.');
     });
@@ -119,9 +162,14 @@ $(document).ready(function () {
         const account = findAccount(customerId);
         if (account && account.security_pin === pin) {
             currentUser = customerId;
-            showView('accountMenuView');
             $('#loginNav, #createAccountNav').parent().hide();
             $('#logoutNav').parent().show();
+            showView('dashboardView'); // Show the main dashboard container
+            showView('viewBalanceView', true); // Show balance in dashboard content by default
+            // Update account balances for the first view
+            const userAccount = findAccount(currentUser);
+            $('#checkingBalance').text(userAccount.checking_balance.toFixed(2));
+            $('#savingsBalance').text(userAccount.savings_balance.toFixed(2));
             showModal('Login Successful', `Welcome, Customer ${currentUser}!`);
         } else {
             showModal('Authentication Failed', 'Invalid Customer ID or PIN.');
@@ -129,45 +177,43 @@ $(document).ready(function () {
         $('#loginForm')[0].reset();
     });
 
-    // --- Account Menu Actions ---
-    $('#exitBtn').click(function () {
+    // --- Dashboard Sidebar Navigation ---
+    $('#exitBtn').click(function (e) {
+        e.preventDefault();
         $('#logoutNav').click(); // Simulate logout
     });
 
-    $('#viewBalanceBtn').click(function () {
+    $('#viewBalanceBtn').click(function (e) {
+        e.preventDefault();
         if (!currentUser) return;
         const account = findAccount(currentUser);
         $('#checkingBalance').text(account.checking_balance.toFixed(2));
         $('#savingsBalance').text(account.savings_balance.toFixed(2));
-        showView('viewBalanceView');
+        showView('viewBalanceView', true);
     });
 
-    $('#depositBtn').click(function () {
+    $('#depositBtn').click(function (e) {
+        e.preventDefault();
         if (!currentUser) return;
         $('#depositForm')[0].reset();
-        showView('depositView');
+        showView('depositView', true);
     });
 
-    $('#withdrawBtn').click(function () {
+    $('#withdrawBtn').click(function (e) {
+        e.preventDefault();
         if (!currentUser) return;
         $('#withdrawForm')[0].reset();
-        showView('withdrawView');
+        showView('withdrawView', true);
     });
 
-    $('#transferBtn').click(function () {
+    $('#transferBtn').click(function (e) {
+        e.preventDefault();
         if (!currentUser) return;
         $('#transferForm')[0].reset();
-        // Pre-fill "To Account" based on "From Account" to avoid transferring to the same account
         const fromAccountType = $('#transferFromAccount').val();
         $('#transferToAccount').val(fromAccountType === 'checking' ? 'savings' : 'checking');
-        showView('transferView');
+        showView('transferView', true);
     });
-
-    // --- Back to Menu Buttons ---
-    $('#backToMenuBtnBalance, #backToMenuBtnDeposit, #backToMenuBtnWithdraw, #backToMenuBtnTransfer').click(function () {
-        showView('accountMenuView');
-    });
-
 
     // --- Transaction Logic ---
     $('#depositForm').submit(function (e) {
@@ -190,7 +236,11 @@ $(document).ready(function () {
         }
         saveAccounts();
         showModal('Success', `Successfully deposited $${amount.toFixed(2)} into ${accountType}.`);
-        showView('accountMenuView');
+        // Update balance view in dashboard
+        const accountData = findAccount(currentUser);
+        $('#checkingBalance').text(accountData.checking_balance.toFixed(2));
+        $('#savingsBalance').text(accountData.savings_balance.toFixed(2));
+        showView('viewBalanceView', true);
     });
 
     $('#withdrawForm').submit(function (e) {
@@ -225,7 +275,11 @@ $(document).ready(function () {
                 return;
             }
         }
-        showView('accountMenuView');
+        // Update balance view in dashboard
+        const accountData = findAccount(currentUser);
+        $('#checkingBalance').text(accountData.checking_balance.toFixed(2));
+        $('#savingsBalance').text(accountData.savings_balance.toFixed(2));
+        showView('viewBalanceView', true);
     });
 
     $('#transferForm').submit(function (e) {
@@ -265,7 +319,11 @@ $(document).ready(function () {
         }
         saveAccounts();
         showModal('Success', `Successfully transferred $${amount.toFixed(2)} from ${fromAccountType} to ${toAccountType}.`);
-        showView('accountMenuView');
+        // Update balance view in dashboard
+        const accountData = findAccount(currentUser);
+        $('#checkingBalance').text(accountData.checking_balance.toFixed(2));
+        $('#savingsBalance').text(accountData.savings_balance.toFixed(2));
+        showView('viewBalanceView', true);
     });
     
     // Logic to ensure "From" and "To" accounts in transfer are different

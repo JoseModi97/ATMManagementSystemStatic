@@ -65,92 +65,126 @@
             </form>
         </section>
 
-        <!-- Account Menu Section -->
+        <!-- Account Menu Section - This will be replaced by the dashboard -->
         <section id="accountMenuView" style="display: none;">
-            <h2>Account Menu</h2>
-            <div class="d-grid gap-2">
-                <button class="btn btn-info" id="viewBalanceBtn">View Balance</button>
-                <button class="btn btn-primary" id="depositBtn">Deposit</button>
-                <button class="btn btn-warning" id="withdrawBtn">Withdraw</button>
-                <button class="btn btn-primary" id="transferBtn">Transfer</button> <!-- Changed btn-success to btn-primary -->
-                <button class="btn btn-danger" id="exitBtn">Exit</button>
+            <!-- Content moved to dashboard -->
+        </section>
+
+        <!-- Dashboard View (Initially Hidden) -->
+        <div id="dashboardView" class="container-fluid" style="display: none; padding-top: 20px;">
+            <div class="row">
+                <!-- Sidebar -->
+                <nav id="dashboardSidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                    <div class="position-sticky pt-3">
+                        <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Account Menu</span>
+                        </h2>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" id="viewBalanceBtn">
+                                    <i class="bi bi-wallet2"></i> View Balance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="depositBtn">
+                                    <i class="bi bi-cash-stack"></i> Deposit
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="withdrawBtn">
+                                    <i class="bi bi-currency-dollar"></i> Withdraw
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="transferBtn">
+                                    <i class="bi bi-arrow-left-right"></i> Transfer
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="exitBtn">
+                                    <i class="bi bi-box-arrow-right"></i> Exit
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <!-- Main content area -->
+                <main id="dashboardContent" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <!-- Content from other sections will be loaded here by app.js -->
+                    <!-- View Balance Section (to be moved here) -->
+                    <section id="viewBalanceView" style="display: none;">
+                        <h2>Account Balance</h2>
+                        <p><strong>Checking Account:</strong> $<span id="checkingBalance">0.00</span></p>
+                        <p><strong>Savings Account:</strong> $<span id="savingsBalance">0.00</span></p>
+                    </section>
+
+                    <!-- Deposit Section (to be moved here) -->
+                    <section id="depositView" style="display: none;">
+                        <h2>Deposit Funds</h2>
+                        <form id="depositForm">
+                            <div class="mb-3">
+                                <label for="depositAccountType" class="form-label">Account Type</label>
+                                <select class="form-select" id="depositAccountType" required>
+                                    <option value="checking">Checking</option>
+                                    <option value="savings">Savings</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="depositAmount" class="form-label">Amount</label>
+                                <input type="number" class="form-control" id="depositAmount" min="0.01" step="0.01" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Deposit</button>
+                        </form>
+                    </section>
+
+                    <!-- Withdraw Section (to be moved here) -->
+                    <section id="withdrawView" style="display: none;">
+                        <h2>Withdraw Funds</h2>
+                        <form id="withdrawForm">
+                            <div class="mb-3">
+                                <label for="withdrawAccountType" class="form-label">Account Type</label>
+                                <select class="form-select" id="withdrawAccountType" required>
+                                    <option value="checking">Checking</option>
+                                    <option value="savings">Savings</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="withdrawAmount" class="form-label">Amount</label>
+                                <input type="number" class="form-control" id="withdrawAmount" min="0.01" step="0.01" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning">Withdraw</button>
+                        </form>
+                    </section>
+
+                    <!-- Transfer Section (to be moved here) -->
+                    <section id="transferView" style="display: none;">
+                        <h2>Transfer Funds</h2>
+                        <form id="transferForm">
+                            <div class="mb-3">
+                                <label for="transferFromAccount" class="form-label">From Account</label>
+                                <select class="form-select" id="transferFromAccount" required>
+                                    <option value="checking">Checking</option>
+                                    <option value="savings">Savings</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="transferToAccount" class="form-label">To Account</label>
+                                <select class="form-select" id="transferToAccount" required>
+                                    <option value="savings">Savings</option>
+                                    <option value="checking">Checking</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="transferAmount" class="form-label">Amount</label>
+                                <input type="number" class="form-control" id="transferAmount" min="0.01" step="0.01" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Transfer</button>
+                        </form>
+                    </section>
+                </main>
             </div>
-        </section>
-
-        <!-- View Balance Section -->
-        <section id="viewBalanceView" style="display: none;">
-            <h2>Account Balance</h2>
-            <p><strong>Checking Account:</strong> $<span id="checkingBalance">0.00</span></p>
-            <p><strong>Savings Account:</strong> $<span id="savingsBalance">0.00</span></p>
-            <button class="btn btn-secondary" id="backToMenuBtnBalance">Back to Menu</button>
-        </section>
-
-        <!-- Deposit Section -->
-        <section id="depositView" style="display: none;">
-            <h2>Deposit Funds</h2>
-            <form id="depositForm">
-                <div class="mb-3">
-                    <label for="depositAccountType" class="form-label">Account Type</label>
-                    <select class="form-select" id="depositAccountType" required>
-                        <option value="checking">Checking</option>
-                        <option value="savings">Savings</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="depositAmount" class="form-label">Amount</label>
-                    <input type="number" class="form-control" id="depositAmount" min="0.01" step="0.01" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Deposit</button>
-                <button type="button" class="btn btn-secondary" id="backToMenuBtnDeposit">Back to Menu</button>
-            </form>
-        </section>
-
-        <!-- Withdraw Section -->
-        <section id="withdrawView" style="display: none;">
-            <h2>Withdraw Funds</h2>
-            <form id="withdrawForm">
-                <div class="mb-3">
-                    <label for="withdrawAccountType" class="form-label">Account Type</label>
-                    <select class="form-select" id="withdrawAccountType" required>
-                        <option value="checking">Checking</option>
-                        <option value="savings">Savings</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="withdrawAmount" class="form-label">Amount</label>
-                    <input type="number" class="form-control" id="withdrawAmount" min="0.01" step="0.01" required>
-                </div>
-                <button type="submit" class="btn btn-warning">Withdraw</button>
-                <button type="button" class="btn btn-secondary" id="backToMenuBtnWithdraw">Back to Menu</button>
-            </form>
-        </section>
-
-        <!-- Transfer Section -->
-        <section id="transferView" style="display: none;">
-            <h2>Transfer Funds</h2>
-            <form id="transferForm">
-                <div class="mb-3">
-                    <label for="transferFromAccount" class="form-label">From Account</label>
-                    <select class="form-select" id="transferFromAccount" required>
-                        <option value="checking">Checking</option>
-                        <option value="savings">Savings</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="transferToAccount" class="form-label">To Account</label>
-                    <select class="form-select" id="transferToAccount" required>
-                        <option value="savings">Savings</option>
-                        <option value="checking">Checking</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="transferAmount" class="form-label">Amount</label>
-                    <input type="number" class="form-control" id="transferAmount" min="0.01" step="0.01" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Transfer</button> <!-- Changed btn-success to btn-primary -->
-                <button type="button" class="btn btn-secondary" id="backToMenuBtnTransfer">Back to Menu</button>
-            </form>
-        </section>
+        </div>
     </div>
 
     <!-- Modal for messages -->
