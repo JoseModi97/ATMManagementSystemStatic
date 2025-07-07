@@ -71,41 +71,54 @@ $(document).ready(function () {
         new bootstrap.Modal($('#messageModal')[0]).show();
     }
 
-    // Initial view
-    showView('loginView');
-    $('#logoutNav').parent().hide();
-    $('#dashboardView').hide(); // Ensure dashboard is hidden initially
+    // Initial view determination based on page and login state
+    // This logic needs to run on both index.html and dashboard.html
+    // We'll use window.location.pathname to differentiate
+    const currentPage = window.location.pathname.split("/").pop();
+
+    if (currentPage === 'dashboard.html') {
+        currentUser = localStorage.getItem('currentUser'); // Retrieve logged-in user
+        if (!currentUser) {
+            window.location.href = 'index.html'; // Not logged in, redirect to login
+        } else {
+            // Logged in, setup dashboard
+            $('#loginNav, #createAccountNav').parent().hide();
+            $('#logoutNav').parent().show();
+            showView('viewBalanceView', true); // Show balance by default
+            // Update account balances
+            const userAccount = findAccount(parseInt(currentUser));
+            if (userAccount) {
+                $('#checkingBalance').text(userAccount.checking_balance.toFixed(2));
+                $('#savingsBalance').text(userAccount.savings_balance.toFixed(2));
+            }
+        }
+    } else { // On index.html
+        showView('loginView');
+        $('#logoutNav').parent().hide();
+        // $('#dashboardView').hide(); // dashboardView is no longer on index.html
+    }
 
 
     // --- Navigation Links ---
+    // These are for index.html primarily
     $('#loginNav').click(function (e) {
         e.preventDefault();
-        if (!currentUser) {
-            showView('loginView');
-            $('#dashboardView').hide(); // Ensure dashboard is hidden
-            $('#loginNav, #createAccountNav').parent().show();
-            $('#logoutNav').parent().hide();
-        }
+        showView('loginView');
     });
 
     $('#createAccountNav').click(function (e) {
         e.preventDefault();
-        if (!currentUser) {
-            showView('createAccountView');
-            $('#dashboardView').hide(); // Ensure dashboard is hidden
-            $('#loginNav, #createAccountNav').parent().show();
-            $('#logoutNav').parent().hide();
-        }
+        showView('createAccountView');
     });
 
+    // This is for dashboard.html
     $('#logoutNav').click(function (e) {
         e.preventDefault();
         currentUser = null;
-        $('#loginNav, #createAccountNav').parent().show();
-        $('#logoutNav').parent().hide();
-        showView('loginView'); // This will hide dashboardView
-        $('#loginForm')[0].reset();
-        showModal('Logout', 'You have been logged out.');
+        localStorage.removeItem('currentUser'); // Clear stored user
+        // Redirect to login page
+        window.location.href = 'index.html';
+        // showModal('Logout', 'You have been logged out.'); // Modal will be on index.html if needed
     });
 
     // --- Authentication ---
@@ -162,25 +175,31 @@ $(document).ready(function () {
         const account = findAccount(customerId);
         if (account && account.security_pin === pin) {
             currentUser = customerId;
-            $('#loginNav, #createAccountNav').parent().hide();
-            $('#logoutNav').parent().show();
-            showView('dashboardView'); // Show the main dashboard container
-            showView('viewBalanceView', true); // Show balance in dashboard content by default
-            // Update account balances for the first view
-            const userAccount = findAccount(currentUser);
-            $('#checkingBalance').text(userAccount.checking_balance.toFixed(2));
-            $('#savingsBalance').text(userAccount.savings_balance.toFixed(2));
-            showModal('Login Successful', `Welcome, Customer ${currentUser}!`);
+            localStorage.setItem('currentUser', currentUser); // Store current user ID
+
+            // Redirect to dashboard page
+            window.location.href = 'dashboard.html';
+            // The rest of the UI update (hiding/showing navs, showing balance)
+            // will be handled by the dashboard.html's script loading.
+            // We can show a success modal here if desired, before redirect.
+            // showModal('Login Successful', `Welcome, Customer ${currentUser}!`);
         } else {
             showModal('Authentication Failed', 'Invalid Customer ID or PIN.');
         }
         $('#loginForm')[0].reset();
     });
 
-    // --- Dashboard Sidebar Navigation ---
+    // --- Dashboard Sidebar Navigation (for dashboard.html) ---
+    // Note: These event listeners should ideally be in a script block on dashboard.html
+    // or in a part of app.js that specifically runs for dashboard.html.
+    // For simplicity in this exercise, they are here but might not fire if currentUser is not set
+    // when app.js is initially parsed on dashboard.html before the localStorage check.
+    // The initial setup for dashboard.html handles the first view.
+
     $('#exitBtn').click(function (e) {
         e.preventDefault();
-        $('#logoutNav').click(); // Simulate logout
+        // This will trigger the logoutNav click handler which redirects
+        $('#logoutNav').click();
     });
 
     $('#viewBalanceBtn').click(function (e) {
