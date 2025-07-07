@@ -1,0 +1,42 @@
+body {
+    padding-top: 56px; /* Adjust this if your navbar height changes */
+}
+
+#dashboardView.vh-100 {
+    /* vh-100 is applied in HTML, ensuring it takes full viewport height */
+    /* padding-top is also applied inline in HTML, matching navbar height */
+}
+
+#dashboardView > .row.h-100 {
+    /* h-100 is applied in HTML */
+    min-height: 0; /* Fix for flex children overflow */
+}
+
+/* Styling for the column that holds the sidebar */
+#dashboardView .sidebar.col-md-3 {
+    /* bg-light is in HTML */
+    /* d-flex flex-column is in HTML */
+    /* No specific width needed here as Bootstrap col-md-3 handles it */
+}
+
+/* The actual sidebar nav element */
+#dashboardSidebar {
+    /* overflow-auto and flex-grow-1 are in HTML */
+}
+
+/* Styling for the column that holds the main content */
+#dashboardContent.col-md-9 {
+    /* ms-sm-auto and px-md-4 are in HTML */
+    /* d-flex flex-column is in HTML */
+}
+
+/* The direct child div of main#dashboardContent that enables scrolling */
+#dashboardContent > div.flex-grow-1.overflow-auto {
+     /* flex-grow-1 and overflow-auto are in HTML */
+    min-height: 0; /* Essential for scrolling within a flex item */
+}
+
+.navbar.fixed-top {
+    /* This is mainly a reminder that its height affects body padding-top */
+    /* height: 56px; /* Set this if Bootstrap doesn't define it or you override it */
+}
