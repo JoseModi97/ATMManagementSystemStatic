@@ -35,20 +35,30 @@
 
     <div class="container mt-5">
         <!-- Login Section -->
-        <section id="loginView">
-            <h2>Login</h2>
-            <form id="loginForm">
-                <div class="mb-3">
-                    <label for="loginCustomerId" class="form-label">Customer ID</label>
-                    <input type="number" class="form-control" id="loginCustomerId" required>
-                </div>
-                <div class="mb-3">
-                    <label for="loginPin" class="form-label">PIN</label>
-                    <input type="password" class="form-control" id="loginPin" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-        </section>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <section id="loginView">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title text-center">Login</h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginCustomerId" class="form-label">Customer ID</label>
+                                    <input type="number" class="form-control" id="loginCustomerId" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPin" class="form-label">PIN</label>
+                                    <input type="password" class="form-control" id="loginPin" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
 
         <!-- Create Account Section -->
         <section id="createAccountView" style="display: none;">
