@@ -9,17 +9,54 @@
     <link rel="stylesheet" href="bootstrap-icons.min.css">
     <link rel="stylesheet" href="custom.min.css">
     <link rel="stylesheet" href="layout.css">
+    <style>
+        /* Custom styles for offcanvas sidebar on smaller screens */
+        @media (max-width: 767.98px) {
+            .sidebar-offcanvas {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                z-index: 1045; /* Bootstrap modal backdrop is 1040, modal is 1050 */
+                display: flex;
+                flex-direction: column;
+                max-width: 80%;
+                transform: translateX(-100%);
+                transition: transform .3s ease-in-out;
+                background-color: var(--bs-light); /* Use Bootstrap variable */
+                visibility: hidden;
+            }
+            .sidebar-offcanvas.show {
+                transform: translateX(0);
+                visibility: visible;
+            }
+        }
+
+        /* Custom styles for balance cards */
+        .balance-card .card-body {
+            font-size: 1.2rem;
+        }
+        .balance-card .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Custom styles for form layout in dashboard sections */
+        .dashboard-form .form-label {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">ATM System</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Toggler button for offcanvas sidebar on smaller screens -->
+            <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <!-- Login and Create Account nav items are removed for dashboard page -->
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="logoutNav">Logout</a>
                     </li>
@@ -28,14 +65,15 @@
         </div>
     </nav>
 
-    <!-- Dashboard View -->
-    <div id="dashboardView" class="container-fluid vh-100" style="padding-top: 56px;"> <div class="row h-100"> <div class="col-md-3 col-lg-2 d-flex flex-column bg-light sidebar">
-            <!-- Sidebar -->
-            <nav id="dashboardSidebar" class="flex-grow-1 overflow-auto">
-                <div class="position-sticky pt-3">
-                    <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Account Menu</span>
-                    </h2>
+    <!-- Offcanvas Sidebar for small screens -->
+    <div class="offcanvas offcanvas-start text-bg-light d-md-none sidebar-offcanvas" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasSidebarLabel">Account Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+             <nav id="dashboardSidebar" class="flex-grow-1 overflow-auto">
+                <div class="pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active" href="#" id="viewBalanceBtn">
@@ -65,80 +103,166 @@
                     </ul>
                 </div>
             </nav>
-            </div> <!-- Main content area -->
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboardView" class="container-fluid vh-100" style="padding-top: 56px;">
+        <div class="row h-100">
+            <!-- Sidebar for medium and larger screens -->
+            <div class="col-md-3 col-lg-2 d-none d-md-flex flex-column bg-light sidebar">
+                 <nav id="dashboardSidebar" class="flex-grow-1 overflow-auto">
+                    <div class="position-sticky pt-3">
+                        <h2 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Account Menu</span>
+                        </h2>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" id="viewBalanceBtn">
+                                    <i class="fas fa-wallet"></i> View Balance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="depositBtn">
+                                    <i class="fas fa-piggy-bank"></i> Deposit
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="withdrawBtn">
+                                    <i class="fas fa-money-bill-wave"></i> Withdraw
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="transferBtn">
+                                    <i class="fas fa-exchange-alt"></i> Transfer
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="exitBtn"> <!-- This will behave like logout -->
+                                    <i class="fas fa-sign-out-alt"></i> Exit
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- Main content area -->
             <main id="dashboardContent" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 d-flex flex-column">
                 <div class="flex-grow-1 overflow-auto">
-                <!-- Content from other sections will be loaded here by app.js -->
-                <!-- View Balance Section -->
-                <section id="viewBalanceView"> <!-- Initially shown or default view -->
-                    <h2>Account Balance</h2>
-                    <p><strong>Checking Account:</strong> $<span id="checkingBalance">0.00</span></p>
-                    <p><strong>Savings Account:</strong> $<span id="savingsBalance">0.00</span></p>
-                </section>
+                    <!-- Content from other sections will be loaded here by app.js -->
+                    <!-- View Balance Section -->
+                    <section id="viewBalanceView">
+                        <h2>Account Balance</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card text-center mb-3 balance-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Checking Account</h5>
+                                        <p class="card-text">$<span id="checkingBalance">0.00</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card text-center mb-3 balance-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Savings Account</h5>
+                                        <p class="card-text">$<span id="savingsBalance">0.00</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
-                <!-- Deposit Section (initially hidden) -->
-                <section id="depositView" style="display: none;">
-                    <h2>Deposit Funds</h2>
-                    <form id="depositForm">
-                        <div class="mb-3">
-                            <label for="depositAccountType" class="form-label">Account Type</label>
-                            <select class="form-select" id="depositAccountType" required>
-                                <option value="checking">Checking</option>
-                                <option value="savings">Savings</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="depositAmount" class="form-label">Amount</label>
-                            <input type="number" class="form-control" id="depositAmount" min="0.01" step="0.01" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Deposit</button>
-                    </form>
-                </section>
+                    <!-- Deposit Section (initially hidden) -->
+                    <section id="depositView" style="display: none;">
+                        <h2>Deposit Funds</h2>
+                        <form id="depositForm" class="dashboard-form">
+                            <div class="row mb-3">
+                                <label for="depositAccountType" class="col-sm-4 col-form-label">Account Type</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" id="depositAccountType" required>
+                                        <option value="checking">Checking</option>
+                                        <option value="savings">Savings</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="depositAmount" class="col-sm-4 col-form-label">Amount</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="depositAmount" min="0.01" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8 offset-sm-4">
+                                    <button type="submit" class="btn btn-primary">Deposit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
 
-                <!-- Withdraw Section (initially hidden) -->
-                <section id="withdrawView" style="display: none;">
-                    <h2>Withdraw Funds</h2>
-                    <form id="withdrawForm">
-                        <div class="mb-3">
-                            <label for="withdrawAccountType" class="form-label">Account Type</label>
-                            <select class="form-select" id="withdrawAccountType" required>
-                                <option value="checking">Checking</option>
-                                <option value="savings">Savings</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="withdrawAmount" class="form-label">Amount</label>
-                            <input type="number" class="form-control" id="withdrawAmount" min="0.01" step="0.01" required>
-                        </div>
-                        <button type="submit" class="btn btn-warning">Withdraw</button>
-                    </form>
-                </section>
+                    <!-- Withdraw Section (initially hidden) -->
+                    <section id="withdrawView" style="display: none;">
+                        <h2>Withdraw Funds</h2>
+                        <form id="withdrawForm" class="dashboard-form">
+                             <div class="row mb-3">
+                                <label for="withdrawAccountType" class="col-sm-4 col-form-label">Account Type</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" id="withdrawAccountType" required>
+                                        <option value="checking">Checking</option>
+                                        <option value="savings">Savings</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="withdrawAmount" class="col-sm-4 col-form-label">Amount</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="withdrawAmount" min="0.01" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8 offset-sm-4">
+                                    <button type="submit" class="btn btn-warning">Withdraw</button>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
 
-                <!-- Transfer Section (initially hidden) -->
-                <section id="transferView" style="display: none;">
-                    <h2>Transfer Funds</h2>
-                    <form id="transferForm">
-                        <div class="mb-3">
-                            <label for="transferFromAccount" class="form-label">From Account</label>
-                            <select class="form-select" id="transferFromAccount" required>
-                                <option value="checking">Checking</option>
-                                <option value="savings">Savings</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="transferToAccount" class="form-label">To Account</label>
-                            <select class="form-select" id="transferToAccount" required>
-                                <option value="savings">Savings</option>
-                                <option value="checking">Checking</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="transferAmount" class="form-label">Amount</label>
-                            <input type="number" class="form-control" id="transferAmount" min="0.01" step="0.01" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Transfer</button>
-                    </form>
-                </section>
+                    <!-- Transfer Section (initially hidden) -->
+                    <section id="transferView" style="display: none;">
+                        <h2>Transfer Funds</h2>
+                        <form id="transferForm" class="dashboard-form">
+                            <div class="row mb-3">
+                                <label for="transferFromAccount" class="col-sm-4 col-form-label">From Account</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" id="transferFromAccount" required>
+                                        <option value="checking">Checking</option>
+                                        <option value="savings">Savings</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="transferToAccount" class="col-sm-4 col-form-label">To Account</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" id="transferToAccount" required>
+                                        <option value="savings">Savings</option>
+                                        <option value="checking">Checking</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="transferAmount" class="col-sm-4 col-form-label">Amount</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="transferAmount" min="0.01" step="0.01" required>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-sm-8 offset-sm-4">
+                                     <button type="submit" class="btn btn-primary">Transfer</button>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
                 </div>
             </main>
         </div>
